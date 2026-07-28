@@ -2,7 +2,7 @@
 
 Lab programs for the **Design and Analysis of Algorithms** course, written in C.
 
-> **Compiler:** GCC (or any standard C compiler) &nbsp;|&nbsp; **Language:** 
+> **Compiler:** GCC (or any standard C compiler) &nbsp;|&nbsp; **Language:** C
 
 ---
 
