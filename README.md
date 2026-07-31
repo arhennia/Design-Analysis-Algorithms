@@ -1,71 +1,122 @@
-# DAAL — Design and Analysis of Algorithms Lab
+# Design & Analysis of Algorithms
 
-Lab programs for the **Design and Analysis of Algorithms** course, written in C.
+A personal collection of C implementations exploring fundamental algorithms and problem-solving techniques.
 
-> **Compiler:** GCC (or any standard C compiler) &nbsp;|&nbsp; **Language:** C
+This repository documents my journey of learning algorithm design, recursion, arrays, searching, sorting, and other core concepts through hands-on implementations.
 
----
-
-## day-1 — Arrays
-
-| # | File | Problem | Concepts |
-|---|------|---------|----------|
-| 1 | `second_smallest_largest.c` | Find the **second smallest** and **second largest** elements | Single-pass min/max tracking |
-| 2 | `prefix_sum.c` | Compute the **prefix sum** array | Running sum |
-| 3 | `duplicate_count.c` | Count **duplicates** & find the **most repeating** element | Frequency counting, nested loops |
-| 4 | `rotate_array.c` | **Right-rotate** an array by `k` positions | In-place swap (`EXCHANGE`) |
-
-**Input:** reads from `input/` directory &nbsp;•&nbsp; **Run:**
-
-```bash
-cd day-1
-gcc prefix_sum.c -o prefix_sum && ./prefix_sum
-```
+> **Language:** C  
+> **Compiler:** GCC
 
 ---
 
-## day-2 — Recursion & File Handling
+## Repository Overview
 
-| # | File | Problem | Concepts |
-|---|------|---------|----------|
-| 1 | `decimal_to_binary.c` | Convert first `n` decimal numbers to **binary** (recursive) | Recursion, CLI args, file I/O |
-| 2 | `gcd_recursive.c` | Find **GCD** of number pairs (Euclidean algorithm, recursive) | Recursion, CLI args, file I/O |
+The repository contains implementations of algorithms and programming exercises covering topics such as:
 
-**Input/Output:** `data/` directory &nbsp;•&nbsp; **Run:**
+- Arrays
+- Recursion
+- File Handling
+- Searching
+- Sorting
+- Divide and Conquer
+- Dynamic Programming *(coming soon)*
+- Greedy Algorithms *(coming soon)*
+- Graph Algorithms *(coming soon)*
+- Backtracking *(coming soon)*
 
-```bash
-cd day-2
-
-# Decimal → Binary
-gcc decimal_to_binary.c -o decimal_to_binary
-./decimal_to_binary 150 data/inDec.dat data/outBin.dat
-
-# GCD
-gcc gcd_recursive.c -o gcd_recursive
-./gcd_recursive data/inGcd.dat data/outGcd.dat
-```
+Each implementation focuses on understanding the underlying algorithm rather than simply producing the final output.
 
 ---
 
-## 📁 Structure
+## Current Progress
 
-```
+### Arrays
+
+| Program | Description |
+|----------|-------------|
+| `second_smallest_largest.c` | Find the second smallest and second largest elements in an array |
+| `prefix_sum.c` | Compute the prefix sum of an array |
+| `duplicate_count.c` | Count duplicate elements and determine the most frequently occurring element |
+| `rotate_array.c` | Rotate an array to the right by *k* positions |
+
+---
+
+### Recursion
+
+| Program | Description |
+|----------|-------------|
+| `decimal_to_binary.c` | Convert decimal numbers to binary using recursion |
+| `gcd_recursive.c` | Compute the Greatest Common Divisor using the recursive Euclidean Algorithm |
+
+---
+
+## Repository Structure
+
+```text
 DAAL/
 ├── day-1/
 │   ├── second_smallest_largest.c
 │   ├── prefix_sum.c
 │   ├── duplicate_count.c
 │   ├── rotate_array.c
-│   └── input/             # Input text files
+│   └── input/
+│
 ├── day-2/
 │   ├── decimal_to_binary.c
-│   ├── decimal_to_binary.txt   # Problem statement
 │   ├── gcd_recursive.c
-│   ├── gcd_recursive.txt       # Problem statement
-│   └── data/                   # Input & output .dat files
+│   └── data/
+│
 └── README.md
 ```
 
 ---
 
-*University coursework — for educational purposes.*
+## Running Programs
+
+Compile using GCC.
+
+```bash
+gcc filename.c -o output
+./output
+```
+
+Example:
+
+```bash
+gcc prefix_sum.c -o prefix_sum
+./prefix_sum
+```
+
+---
+
+## Goals
+
+This repository is intended to strengthen my understanding of:
+
+- Algorithmic thinking
+- Time and space complexity
+- Problem decomposition
+- Efficient data processing
+- Clean C programming practices
+
+New algorithms and problem-solving approaches will be added as I continue learning.
+
+---
+
+## Future Topics
+
+- Searching Algorithms
+- Sorting Algorithms
+- Divide and Conquer
+- Dynamic Programming
+- Greedy Algorithms
+- Graph Algorithms
+- Trees
+- Backtracking
+- String Algorithms
+
+---
+
+## License
+
+This repository is intended for educational purposes and personal learning.
