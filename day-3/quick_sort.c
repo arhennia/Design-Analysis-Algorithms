@@ -37,12 +37,10 @@ void quickSort(int A[], int low, int high) {
 }
 
 int main() {
-    int A[] = {10, 7, 8, 9, 1, 5};
+    int A[] = {20, 13, 7, 8, 9, 1, 5};
     int n = sizeof(A) / sizeof(A[0]);
-
     quickSort(A, 0, n - 1);
-
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++){
         printf("%d ", A[i]);
     }
     printf("\n");
