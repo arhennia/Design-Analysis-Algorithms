@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Structure to store a character and its frequency
+
 typedef struct {
     char alphabet;
     int frequency;
 } SYMBOL;
 
-// Node of the Huffman Tree
-typedef struct HuffmanNode {
+
+typedef struct HuffmanNode { // Node of the Huffman Tree
     char alphabet;
     int frequency;
     struct HuffmanNode *left;
@@ -22,17 +22,17 @@ typedef struct {
     HuffmanNode **array;
 } MinPriorityQueue;
 
-// Helper to create a new Huffman node
+// new Huffman node
 HuffmanNode *createNode(char alphabet, int frequency) {
     HuffmanNode *node = (HuffmanNode *)malloc(sizeof(HuffmanNode));
     node->alphabet = alphabet;
     node->frequency = frequency;
     node->left = NULL;
     node->right = NULL;
-    return node;
+    return node; //dude is fucked up for real
 }
 
-// Helper to create a Min-Priority Queue
+// helper to create a Min-Priority Queue
 MinPriorityQueue *createQueue(int capacity) {
     MinPriorityQueue *queue = (MinPriorityQueue *)malloc(sizeof(MinPriorityQueue));
     queue->size = 0;
@@ -69,7 +69,7 @@ void minHeapify(MinPriorityQueue *queue, int idx) {
     }
 }
 
-// Extract minimum frequency node from Min-Priority Queue
+// extract minimum frequency node from Min-Priority Queue
 HuffmanNode *extractMin(MinPriorityQueue *queue) {
     if (queue->size <= 0) return NULL;
 
