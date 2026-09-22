@@ -17,7 +17,7 @@ typedef struct HuffmanNode {
 
 // Min-Priority Queue for Huffman Nodes
 typedef struct {
-    int size;
+    int size; 
     int capacity;
     HuffmanNode **array;
 } MinPriorityQueue;
