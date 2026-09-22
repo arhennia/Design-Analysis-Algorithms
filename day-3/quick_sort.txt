@@ -1,0 +1,7 @@
+3.2 Aim of the program: Write a program in C to implement Quick Sort to sort an array of integers in ascending order using the Divide and Conquer technique.
+
+Sample Input:
+Array: 20 13 7 8 9 1 5
+
+Sample Output:
+1 5 7 8 9 13 20
