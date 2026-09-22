@@ -1,0 +1,7 @@
+3.1 Aim of the program: Write a program in C to implement Merge Sort to sort an array of integers in ascending order using the Divide and Conquer technique.
+
+Sample Input:
+Array: 12 11 13 5 6 7
+
+Sample Output:
+5 6 7 11 12 13
