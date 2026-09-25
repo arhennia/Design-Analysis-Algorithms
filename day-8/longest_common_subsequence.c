@@ -4,18 +4,15 @@
 
 #define MAX_LEN 1024
 
-// Longest Common Subsequence using Dynamic Programming
 void findLCS(const char *X, const char *Y) {
     int m = (int)strlen(X);
     int n = (int)strlen(Y);
 
-    // Allocate DP table (m+1) x (n+1)
     int **L = (int **)malloc((m + 1) * sizeof(int *));
     for (int i = 0; i <= m; i++) {
         L[i] = (int *)calloc(n + 1, sizeof(int));
     }
 
-    // Build the LCS table in bottom-up manner
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
             if (X[i - 1] == Y[j - 1]) {
@@ -28,7 +25,6 @@ void findLCS(const char *X, const char *Y) {
 
     int lcsLength = L[m][n];
 
-    // Reconstruct LCS string from DP table
     char *lcsStr = (char *)malloc((lcsLength + 1) * sizeof(char));
     lcsStr[lcsLength] = '\0';
 
@@ -47,12 +43,10 @@ void findLCS(const char *X, const char *Y) {
         }
     }
 
-    // Display results
     printf("\nOutput:\n");
     printf("LCS: %s\n", lcsStr);
     printf("LCS Length: %d\n", lcsLength);
 
-    // Free memory
     free(lcsStr);
     for (int k = 0; k <= m; k++) {
         free(L[k]);
@@ -77,6 +71,5 @@ int main(void) {
     }
 
     findLCS(str1, str2);
-
     return 0;
 }
