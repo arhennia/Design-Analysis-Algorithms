@@ -2,7 +2,7 @@
 
 A structured collection of C implementations exploring fundamental algorithms, data structures, and problem-solving techniques.
 
-This repository documents hands-on lab implementations covering array manipulation, recursion, divide and conquer, heaps, and greedy algorithms.
+This repository documents hands-on lab implementations covering array manipulation, recursion, divide and conquer, heaps, greedy algorithms, graph algorithms, and dynamic programming.
 
 > **Language:** C  
 > **Compiler:** GCC  
@@ -18,9 +18,10 @@ The repository covers core algorithm design paradigms:
 - **Recursion & File I/O** (Day 2)
 - **Divide and Conquer** (Day 3)
 - **Heaps & Priority Queues** (Day 4)
-- **Greedy Techniques** (Day 5)
-- Dynamic Programming *(coming soon)*
-- Graph Algorithms *(coming soon)*
+- **Greedy Techniques — Part I** (Day 5)
+- **Greedy Techniques — Part II (MST)** (Day 6)
+- **Greedy Techniques — Part III (Shortest Path)** (Day 7)
+- **Dynamic Programming** (Day 8)
 - Backtracking *(coming soon)*
 
 ---
@@ -81,6 +82,32 @@ The repository covers core algorithm design paradigms:
 
 ---
 
+### Day 6: Minimum Cost Spanning Tree (Greedy)
+
+| # | Program | Description |
+|---|---------|-------------|
+| 6.1 | [`prims_mst.c`](day-6/prims_mst.c) | Prim's Algorithm using Min-Priority Queue on cost adjacency matrix to find MST and total cost |
+| 6.2 | [`kruskals_mst.c`](day-6/kruskals_mst.c) | Kruskal's Algorithm using Disjoint Set Union (DSU) to find MST edges and total cost |
+
+---
+
+### Day 7: Single Source Shortest Path (Greedy)
+
+| # | Program | Description |
+|---|---------|-------------|
+| 7.1 | [`dijkstras_algorithm.c`](day-7/dijkstras_algorithm.c) | Dijkstra's Algorithm on directed graph to compute shortest path lengths and paths from source |
+
+---
+
+### Day 8: Dynamic Programming
+
+| # | Program | Description |
+|---|---------|-------------|
+| 8.1 | [`matrix_chain_multiplication.c`](day-8/matrix_chain_multiplication.c) | Matrix Chain Multiplication computing M-table, S-table, optimal parenthesization, and scalar multiplications |
+| 8.2 | [`longest_common_subsequence.c`](day-8/longest_common_subsequence.c) | Longest Common Subsequence (LCS) using DP table to find LCS string and length |
+
+---
+
 ## Repository Structure
 
 ```text
@@ -122,11 +149,35 @@ DAAL/
 │   └── input/
 │       └── students.txt
 │
-└── day-5/
-    ├── fractional_knapsack.c
-    ├── fractional_knapsack.txt
-    ├── huffman_coding.c
-    └── huffman_coding.txt
+├── day-5/
+│   ├── fractional_knapsack.c
+│   ├── fractional_knapsack.txt
+│   ├── huffman_coding.c
+│   └── huffman_coding.txt
+│
+├── day-6/
+│   ├── kruskals_mst.c
+│   ├── kruskals_mst.txt
+│   ├── prims_mst.c
+│   ├── prims_mst.txt
+│   └── input/
+│       ├── inUnAdjMat.dat
+│       └── kruskal_input.txt
+│
+├── day-7/
+│   ├── dijkstras_algorithm.c
+│   ├── dijkstras_algorithm.txt
+│   └── input/
+│       └── inDiAdjMat1.dat
+│
+└── day-8/
+    ├── longest_common_subsequence.c
+    ├── longest_common_subsequence.txt
+    ├── matrix_chain_multiplication.c
+    ├── matrix_chain_multiplication.txt
+    └── input/
+        ├── lcs_input.txt
+        └── mcm_input.txt
 ```
 
 ---
@@ -135,24 +186,37 @@ DAAL/
 
 Compile using GCC:
 
-### Day 4 Example (Heaps)
+### Day 6 Examples (MST)
 ```bash
-cd day-4
-gcc -Wall -Wextra person_heap.c -o person_heap
-./person_heap
+cd day-6
+
+# Prim's Algorithm
+gcc -Wall -Wextra prims_mst.c -o prims_mst
+./prims_mst
+
+# Kruskal's Algorithm
+gcc -Wall -Wextra kruskals_mst.c -o kruskals_mst
+./kruskals_mst < input/kruskal_input.txt
 ```
 
-### Day 5 Examples (Greedy)
+### Day 7 Example (Dijkstra)
 ```bash
-cd day-5
+cd day-7
+gcc -Wall -Wextra dijkstras_algorithm.c -o dijkstras_algorithm
+./dijkstras_algorithm
+```
 
-# Fractional Knapsack
-gcc -Wall -Wextra fractional_knapsack.c -o fractional_knapsack
-./fractional_knapsack
+### Day 8 Examples (Dynamic Programming)
+```bash
+cd day-8
 
-# Huffman Coding
-gcc -Wall -Wextra huffman_coding.c -o huffman_coding
-./huffman_coding
+# Matrix Chain Multiplication
+gcc -Wall -Wextra matrix_chain_multiplication.c -o matrix_chain_multiplication
+./matrix_chain_multiplication < input/mcm_input.txt
+
+# Longest Common Subsequence
+gcc -Wall -Wextra longest_common_subsequence.c -o longest_common_subsequence
+./longest_common_subsequence < input/lcs_input.txt
 ```
 
 ---
