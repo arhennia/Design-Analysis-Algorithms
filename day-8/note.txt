@@ -1,0 +1,112 @@
+================================================================================
+                    LAB DAY 8 NOTES: DYNAMIC PROGRAMMING
+================================================================================
+
+1. OVERVIEW & THE DYNAMIC PROGRAMMING PARADIGM
+--------------------------------------------------------------------------------
+Dynamic Programming (DP) is an algorithmic paradigm used to solve optimization
+problems by breaking them down into simpler overlapping subproblems, solving each
+subproblem once, and storing their solutions in a table (memoization or tabulation)
+to avoid redundant computations.
+
+Two Essential Properties for DP:
+  1. Optimal Substructure: An optimal solution to the overall problem contains
+     within it optimal solutions to subproblems.
+  2. Overlapping Subproblems: A naive recursive approach visits the same
+     subproblems repeatedly rather than generating new subproblems.
+
+DP Approaches:
+  - Top-Down with Memoization: Recursive approach + cache table.
+  - Bottom-Up with Tabulation: Iterative approach filling tables in topological
+    order of subproblem dependencies.
+
+
+2. PROBLEM 8.1: MATRIX CHAIN MULTIPLICATION (MCM)
+--------------------------------------------------------------------------------
+Background:
+  - Multiplying matrix A (dimensions p x q) and matrix B (dimensions q x r)
+    requires p * q * r scalar multiplications.
+  - Matrix multiplication is associative: (A * B) * C = A * (B * C), but the
+    number of scalar operations varies dramatically depending on parenthesization.
+
+Problem Statement:
+  - Given a chain of `n` matrices <A1, A2, ..., An>, where matrix Ai has dimensions
+    p[i-1] x p[i], find the parenthesization that minimizes the total scalar
+    multiplication operations.
+
+Recurrence Relation:
+  Let m[i, j] be the minimum scalar multiplications needed to compute Ai..j:
+    - Base Case: m[i, i] = 0 (single matrix requires 0 multiplications).
+    - Recursive Step (for 1 <= i < j <= n):
+        m[i, j] = min_{i <= k < j} { m[i, k] + m[k+1, j] + p[i-1] * p[k] * p[j] }
+    - S-table record: s[i, j] = k (the optimal split index that achieved the minimum).
+
+Bottom-Up Tabulation Order:
+  - Loop chain length `l` from 2 up to `n`:
+    - Loop starting index `i` from 1 to `n - l + 1`:
+      - Set `j = i + l - 1`
+      - Evaluate all possible splits `k` from `i` to `j - 1` and find minimum.
+
+Reconstructing Optimal Parenthesization:
+  - Recursively print from the S-table:
+    `printOptimalParens(s, i, j)`:
+      If i == j -> print "Ai"
+      Else -> print "(" + printOptimalParens(s, i, s[i,j]) + " " + printOptimalParens(s, s[i,j]+1, j) + ")"
+
+
+3. PROBLEM 8.2: LONGEST COMMON SUBSEQUENCE (LCS)
+--------------------------------------------------------------------------------
+Background:
+  - A Subsequence is a sequence that appears in the same relative order, but not
+    necessarily contiguous (e.g., "ace" is a subsequence of "abcde").
+  - A Substring must be contiguous.
+
+Problem Statement:
+  - Given two strings X[0..m-1] and Y[0..n-1], find the length of the longest
+    subsequence common to both strings, and reconstruct the LCS string.
+
+Recurrence Relation:
+  Let L[i, j] be the length of LCS of prefixes X[0..i-1] and Y[0..j-1]:
+    - Base Case: L[i, 0] = 0 and L[0, j] = 0.
+    - If characters match (X[i-1] == Y[j-1]):
+        L[i, j] = 1 + L[i-1, j-1]
+    - If characters do not match (X[i-1] != Y[j-1]):
+        L[i, j] = max(L[i-1, j], L[i, j-1])
+
+Backtracking to Reconstruct the LCS String:
+  - Start at bottom-right corner: `i = m`, `j = n`.
+  - While `i > 0` and `j > 0`:
+    - If `X[i-1] == Y[j-1]`: Character belongs to LCS -> append X[i-1], decrement `i--`, `j--`.
+    - Else if `L[i-1][j] >= L[i][j-1]`: Move up -> `i--`.
+    - Else: Move left -> `j--`.
+  - Reverse the collected characters to get the final LCS string.
+
+
+4. DRY-RUN / TRACE EXAMPLES
+--------------------------------------------------------------------------------
+A. MCM Trace (Dimensions: A1: 30x35, A2: 35x15, A3: 15x5, A4: 5x10; p = [30, 35, 15, 5, 10]):
+  - Chain length 2:
+      m[1,2] = 30*35*15 = 15750, s[1,2] = 1
+      m[2,3] = 35*15*5  = 2625,  s[2,3] = 2
+      m[3,4] = 15*5*10  = 750,   s[3,4] = 3
+  - Chain length 3:
+      m[1,3] = min(m[1,1]+m[2,3]+30*35*5, m[1,2]+m[3,3]+30*15*5) = min(7875, 18000) = 7875, s[1,3] = 1
+      m[2,4] = min(m[2,2]+m[3,4]+35*15*10, m[2,3]+m[4,4]+35*5*10) = min(6000, 4375) = 4375, s[2,4] = 3
+  - Chain length 4:
+      m[1,4] = min(k=1: 19875, k=2: 18375, k=3: 9375) = 9375, s[1,4] = 3
+  - Result: ((A1 (A2 A3)) A4) with 9375 scalar multiplications.
+
+B. LCS Trace (X = "10010101", Y = "010110110"):
+  - DP table dimensions: 9 x 10
+  - Optimal LCS Length: L[8][9] = 6
+  - Reconstructed LCS: "100110" (or "101010")
+
+
+5. COMPLEXITY SUMMARY
+--------------------------------------------------------------------------------
+| Algorithm             | Time Complexity | Space Complexity |
+|-----------------------|-----------------|------------------|
+| Matrix Chain (MCM)    | O(n^3)          | O(n^2)           |
+| LCS DP Computation    | O(m * n)        | O(m * n)         |
+| LCS Reconstruction    | O(m + n)        | O(LCS Length)    |
+================================================================================
