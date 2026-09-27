@@ -1,0 +1,122 @@
+================================================================================
+                       LAB DAY 4 NOTES: HEAPS & PRIORITY QUEUES
+================================================================================
+
+1. OVERVIEW & CONCEPTS
+--------------------------------------------------------------------------------
+A Binary Heap is a specialized Complete Binary Tree data structure that satisfies
+the Heap Property. Because it is a complete binary tree, it can be efficiently
+represented using a contiguous 1D array without requiring explicit pointer nodes.
+
+Key Properties:
+  - Shape Property: Complete binary tree (all levels are completely filled except
+    possibly the last, which is filled from left to right).
+  - Min-Heap Property: For every node i other than root, key(parent(i)) <= key(i).
+    The minimum element is always at the root (index 0).
+  - Max-Heap Property: For every node i other than root, key(parent(i)) >= key(i).
+    The maximum element is always at the root (index 0).
+
+Array Indexing Formula (0-indexed):
+  - Parent(i)      = (i - 1) / 2      (using integer division)
+  - LeftChild(i)   = 2 * i + 1
+  - RightChild(i)  = 2 * i + 2
+
+
+2. CORE ALGORITHMS & OPERATIONS
+--------------------------------------------------------------------------------
+A. Min-Heapify / Max-Heapify (Top-Down Sift-Down)
+   - Assumes left and right subtrees of index `i` are valid heaps, but element at
+     `i` may violate the heap property.
+   - Compares `i` with its left and right children.
+   - Swaps `i` with the smallest (in Min-Heap) or largest (in Max-Heap) child.
+   - Recursively / iteratively heapifies down until the heap property is restored.
+   - Time Complexity: O(log n), where n is the number of elements.
+
+B. Build-Heap (Bottom-Up Construction)
+   - Given an arbitrary array of n elements:
+   - Leaf nodes are located at indices from n/2 to n-1 (they trivially satisfy
+     heap property).
+   - Iterate from the last non-leaf node (index (n/2) - 1) down to index 0,
+     calling heapify on each index.
+   - Mathematical Time Complexity: O(n) (not O(n log n), because higher levels
+     have fewer nodes to sift down).
+
+C. Insertion (Bottom-Up Sift-Up)
+   - Place the new element at the end of the array (index `size`).
+   - Increment `size`.
+   - Compare new element with its parent. If smaller (Min-Heap) or larger (Max-Heap),
+     swap with parent and move up (sift-up) until the parent satisfies the property.
+   - Time Complexity: O(log n).
+
+D. Deletion / Extract Root
+   - Replace the root element (index 0) with the last element (index `size - 1`).
+   - Decrement `size`.
+   - Call Heapify on the new root (index 0) to restore the heap property.
+   - Time Complexity: O(log n).
+
+E. Arbitrary Deletion (e.g., Deleting the oldest person)
+   - Locate the target element index `k` in the heap.
+   - Replace element at `k` with the last element in the heap.
+   - Decrement `size`.
+   - Perform sift-down / sift-up from index `k` to restore heap ordering.
+
+
+3. LAB DAY 4 IMPLEMENTATION DETAILS (`person_heap.c`)
+--------------------------------------------------------------------------------
+Structure Definition:
+  typedef struct {
+      int id;
+      char name[64];
+      int age;
+      int height;
+      int weight_lb;
+  } Person;
+
+Menu Operations Implemented:
+  1. Read Data from File:
+     - Dynamically allocates an array of `Person` structs (`malloc` / `realloc`).
+     - Reads records from `students.txt`.
+  2. Min-Heap based on Age:
+     - Reorders array such that the youngest person is at root (`array[0]`).
+  3. Max-Heap based on Weight:
+     - Reorders array such that the heaviest person is at root (`array[0]`).
+  4. Display Weight of Youngest Person in kg:
+     - Converts weight from pounds (lb) to kilograms (kg):
+       Weight(kg) = Weight(lb) * 0.45359237
+     - Displays youngest student's name, age, and converted weight.
+  5. Insert New Person:
+     - Takes interactive user input for a new person record.
+     - Dynamically expands capacity if needed and inserts into the Min-Heap.
+  6. Delete Oldest Person:
+     - Scans heap to find maximum age, swaps with last element, and re-heapifies.
+
+
+4. DRY-RUN / EXAMPLE TRACE
+--------------------------------------------------------------------------------
+Input Records (Age values): [21, 19, 23, 18, 20]
+
+Build Min-Heap:
+  - Array representation: [21, 19, 23, 18, 20]
+  - Last non-leaf index = (5/2) - 1 = 1 (Node with value 19, children 18 and 20).
+    Smallest child is 18 -> Swap 19 and 18:
+    Array: [21, 18, 23, 19, 20]
+  - Heapify at index 0 (Value 21, children 18 and 23).
+    Smallest child is 18 -> Swap 21 and 18:
+    Array: [18, 21, 23, 19, 20]
+    Sift down 21 (children 19 and 20). Smallest is 19 -> Swap 21 and 19:
+    Array: [18, 19, 23, 21, 20]
+  - Valid Min-Heap: Root is 18 (Youngest).
+
+
+5. COMPLEXITY SUMMARY
+--------------------------------------------------------------------------------
+| Operation           | Time Complexity | Space Complexity |
+|---------------------|-----------------|------------------|
+| Heapify (Sift-Down) | O(log n)        | O(1) iterative   |
+| Build Heap          | O(n)            | O(1) auxiliary   |
+| Insert              | O(log n)        | O(1)             |
+| Extract Min/Max     | O(log n)        | O(1)             |
+| Search / Find Min   | O(1) for root   | O(1)             |
+| Arbitrary Delete    | O(n) search +   | O(1)             |
+|                     | O(log n) reheap |                  |
+================================================================================
