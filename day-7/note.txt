@@ -1,0 +1,110 @@
+================================================================================
+       LAB DAY 7 NOTES: SINGLE SOURCE SHORTEST PATH (DIJKSTRA'S ALGORITHM)
+================================================================================
+
+1. OVERVIEW & THE SSSP PROBLEM
+--------------------------------------------------------------------------------
+The Single-Source Shortest Path (SSSP) problem asks: Given a weighted graph
+G = (V, E) (directed or undirected) and a designated source vertex `s`, find the
+minimum total weight path from `s` to every other vertex `v` in V.
+
+Dijkstra's Algorithm is a greedy algorithm that solves the SSSP problem when all
+edge weights are non-negative (w(u, v) >= 0).
+
+Why Non-Negative Weights are Required:
+  - Dijkstra assumes that once a vertex `u` is extracted with the minimum distance
+    estimate, its shortest distance from the source is finalized and will never
+    decrease.
+  - Negative edge weights violate this greedy assumption because taking a longer
+    path with later negative edges could yield a smaller total cost. (For graphs
+    with negative weights, the Bellman-Ford algorithm must be used instead).
+
+
+2. CORE CONCEPTS & MECHANISMS
+--------------------------------------------------------------------------------
+A. Edge Relaxation:
+   - For an edge (u, v) with weight `w(u, v)`:
+     If the current path from `s` to `v` can be improved by going through `u`:
+       dist[v] = min(dist[v], dist[u] + w(u, v))
+       parent[v] = u
+
+B. State Maintenance:
+   - `dist[v]`: Holds the current shortest known distance from `s` to `v`.
+     Initialized to 0 for `s`, and `INFINITY` (or `INT_MAX`) for all other vertices.
+   - `visited[v]`: Boolean array tracking whether the shortest path to `v` has
+     been finalized.
+   - `parent[v]`: Predecessor array storing the immediate parent of `v` on the
+     shortest path from `s`. Initialized to -1.
+
+
+3. ALGORITHM STEP-BY-STEP
+--------------------------------------------------------------------------------
+1. Set `dist[s] = 0` and `dist[v] = INT_MAX` for all `v != s`.
+2. Set `parent[v] = -1` and `visited[v] = 0` for all `v`.
+3. Loop `count = 0` to `n - 1`:
+   a. Find the unvisited vertex `u` with the smallest `dist[u]` value:
+      `u = minDistance(dist, visited, n)`
+   b. If `u == -1` or `dist[u] == INT_MAX`, break (remaining vertices are unreachable).
+   c. Mark `u` as visited: `visited[u] = 1`.
+   d. For every neighbor `v` of `u`:
+      If `!visited[v]` and `graph[u][v] > 0` and `dist[u] + graph[u][v] < dist[v]`:
+         - Update `dist[v] = dist[u] + graph[u][v]`
+         - Update `parent[v] = u`
+
+4. Path Reconstruction:
+   - To display the path from source `s` to target `t`:
+     Start at `curr = t`, follow `curr = parent[curr]` backwards until `curr == s`.
+     Reverse or collect the sequence to print `s -> ... -> t`.
+
+
+4. DRY-RUN / EXAMPLE TRACE
+--------------------------------------------------------------------------------
+Given Graph (5 vertices, 1-indexed, Source = 1):
+  Matrix:
+    1: [0, 10,  0,  5,  0]
+    2: [0,  0,  1,  2,  0]
+    3: [0,  0,  0,  0,  4]
+    4: [0,  3,  9,  0,  2]
+    5: [7,  0,  6,  0,  0]
+
+Step-by-step execution:
+  - Init: dist = [0, INF, INF, INF, INF], visited = [F, F, F, F, F]
+  - Step 1: Pick u = 1 (dist 0). Relax neighbors of 1:
+            dist[2] = 10 (parent: 1)
+            dist[4] = 5  (parent: 1)
+            visited = [T, F, F, F, F]
+  - Step 2: Pick u = 4 (dist 5). Relax neighbors of 4:
+            dist[2] = min(10, 5 + 3) = 8 (parent updated to 4)
+            dist[3] = min(INF, 5 + 9) = 14 (parent: 4)
+            dist[5] = min(INF, 5 + 2) = 7 (parent: 4)
+            visited = [T, F, F, T, F]
+  - Step 3: Pick u = 5 (dist 7). Relax neighbors of 5:
+            dist[3] = min(14, 7 + 6) = 13 (parent updated to 5)
+            visited = [T, F, F, T, T]
+  - Step 4: Pick u = 2 (dist 8). Relax neighbors of 2:
+            dist[3] = min(13, 8 + 1) = 9 (parent updated to 2)
+            visited = [T, T, F, T, T]
+  - Step 5: Pick u = 3 (dist 9). Visited = [T, T, T, T, T].
+
+Final Results:
+  Source  Destination  Cost  Path
+  1       1            0     -
+  1       2            8     1->4->2
+  1       3            9     1->4->2->3
+  1       4            5     1->4
+  1       5            7     1->4->5
+
+
+5. COMPLEXITY & COMPARISON
+--------------------------------------------------------------------------------
+| Implementation               | Time Complexity     | Space Complexity |
+|------------------------------|---------------------|------------------|
+| Adjacency Matrix (in code)   | O(V^2)              | O(V^2)           |
+| Min-Priority Queue (Heap)    | O((V + E) log V)    | O(V + E)         |
+| Fibonacci Heap               | O(E + V log V)      | O(V + E)         |
+
+Algorithm Comparison:
+  - Dijkstra: SSSP, Non-negative weights only -> O(V^2) or O((V+E) log V).
+  - Bellman-Ford: SSSP, Allows negative weights & detects negative cycles -> O(V * E).
+  - Floyd-Warshall: All-Pairs Shortest Path (APSP), Dynamic Programming -> O(V^3).
+================================================================================
