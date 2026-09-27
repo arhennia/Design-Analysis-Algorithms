@@ -144,6 +144,7 @@ DAAL/
 │   └── quick_sort.txt
 │
 ├── day-4/
+│   ├── note.txt
 │   ├── person_heap.c
 │   ├── person_heap.txt
 │   └── input/
@@ -153,11 +154,13 @@ DAAL/
 │   ├── fractional_knapsack.c
 │   ├── fractional_knapsack.txt
 │   ├── huffman_coding.c
-│   └── huffman_coding.txt
+│   ├── huffman_coding.txt
+│   └── note.txt
 │
 ├── day-6/
 │   ├── kruskals_mst.c
 │   ├── kruskals_mst.txt
+│   ├── note.txt
 │   ├── prims_mst.c
 │   ├── prims_mst.txt
 │   └── input/
@@ -167,6 +170,7 @@ DAAL/
 ├── day-7/
 │   ├── dijkstras_algorithm.c
 │   ├── dijkstras_algorithm.txt
+│   ├── note.txt
 │   └── input/
 │       └── inDiAdjMat1.dat
 │
@@ -175,6 +179,7 @@ DAAL/
     ├── longest_common_subsequence.txt
     ├── matrix_chain_multiplication.c
     ├── matrix_chain_multiplication.txt
+    ├── note.txt
     └── input/
         ├── lcs_input.txt
         └── mcm_input.txt
