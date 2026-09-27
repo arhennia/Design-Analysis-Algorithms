@@ -1,0 +1,99 @@
+================================================================================
+                    LAB DAY 5 NOTES: GREEDY TECHNIQUES — PART I
+================================================================================
+
+1. OVERVIEW & THE GREEDY PARADIGM
+--------------------------------------------------------------------------------
+The Greedy Method is an algorithmic paradigm that builds a solution step-by-step,
+always choosing the next piece that offers the most immediate, local benefit
+(a locally optimal choice) with the intent of reaching a global optimum.
+
+Key Conditions for Greedy Applicability:
+  1. Greedy Choice Property: A globally optimal solution can be reached by making
+     locally optimal (greedy) choices without reconsidering previous decisions.
+  2. Optimal Substructure: An optimal solution to the overall problem contains
+     within it optimal solutions to subproblems.
+
+
+2. PROBLEM 5.1: FRACTIONAL KNAPSACK PROBLEM
+--------------------------------------------------------------------------------
+Problem Formulation:
+  - Given `n` items, each having a weight `w_i` and profit/value `v_i`.
+  - A knapsack with maximum weight capacity `W`.
+  - Goal: Maximize total profit in the knapsack.
+  - Unlike 0/1 Knapsack, items are continuous / divisible (we can take a fraction
+    `x_i` where 0 <= x_i <= 1).
+
+Greedy Strategy:
+  1. Compute the Profit-to-Weight ratio for each item:
+       r_i = v_i / w_i  (value per unit weight)
+  2. Sort all items in descending order of their ratio `r_i`.
+     (In `fractional_knapsack.c`, Max-Heap / Heap Sort is used).
+  3. Greedily select items:
+     - If the item's weight fits completely (`w_i <= remaining_capacity`):
+       Take 100% of the item: `x_i = 1`, `remaining_capacity -= w_i`,
+       `total_profit += v_i`.
+     - If the item does not fit completely:
+       Take a fraction: `x_i = remaining_capacity / w_i`,
+       `total_profit += x_i * v_i`, `remaining_capacity = 0`.
+     - Stop once the knapsack is full (`remaining_capacity == 0`).
+
+Comparison:
+  - Fractional Knapsack: Greedy strategy is provably optimal -> O(n log n) time.
+  - 0/1 Knapsack: Greedy choice FAILS; requires Dynamic Programming -> O(n * W).
+
+
+3. PROBLEM 5.2: HUFFMAN CODING (DATA COMPRESSION)
+--------------------------------------------------------------------------------
+Problem Formulation:
+  - Given a set of distinct characters and their frequencies of occurrence in a text.
+  - Goal: Assign variable-length binary codes to characters such that:
+    1. Frequently occurring characters get shorter codes.
+    2. Infrequently occurring characters get longer codes.
+    3. The code is Prefix-Free: No character's code is a prefix of another's.
+       (Ensures unambiguous decodability without delimiters).
+
+Huffman Tree Construction Algorithm (Using Min-Priority Queue):
+  1. Create a leaf node for each character with its frequency and insert all
+     leaf nodes into a Min-Priority Queue (Min-Heap keyed by frequency).
+  2. While the Min-Heap contains more than 1 node:
+     a. Extract the two nodes with the lowest frequencies: `left = extractMin()`,
+        `right = extractMin()`.
+     b. Create a new internal node `z` with:
+          frequency = left.frequency + right.frequency
+          z.left = left
+          z.right = right
+     c. Insert node `z` back into the Min-Priority Queue.
+  3. The single remaining node in the queue is the root of the Huffman Tree.
+
+Code Assignment:
+  - Traverse from root to leaves:
+    - Moving Left corresponds to bit '0'.
+    - Moving Right corresponds to bit '1'.
+  - Leaf nodes represent the characters and their generated prefix codes.
+
+
+4. DRY-RUN / EXAMPLE TRACE
+--------------------------------------------------------------------------------
+Example: Characters & Frequencies: (A: 5), (B: 9), (C: 12), (D: 13), (E: 16), (F: 45)
+
+Huffman Merge Steps:
+  1. Extract A(5), B(9) -> Create Z1(14) [children: A, B] -> Heap: [C:12, D:13, Z1:14, E:16, F:45]
+  2. Extract C(12), D(13) -> Create Z2(25) [children: C, D] -> Heap: [Z1:14, E:16, Z2:25, F:45]
+  3. Extract Z1(14), E(16) -> Create Z3(30) [children: Z1, E] -> Heap: [Z2:25, Z3:30, F:45]
+  4. Extract Z2(25), Z3(30) -> Create Z4(55) [children: Z2, Z3] -> Heap: [F:45, Z4:55]
+  5. Extract F(45), Z4(55) -> Create Root(100) [children: F, Z4]
+
+Resulting Prefix Codes:
+  - F: 0 (1 bit for 45% frequency!)
+  - C: 100, D: 101, A: 1100, B: 1101, E: 111
+
+
+5. COMPLEXITY ANALYSIS
+--------------------------------------------------------------------------------
+| Algorithm             | Time Complexity | Space Complexity |
+|-----------------------|-----------------|------------------|
+| Fractional Knapsack   | O(n log n)      | O(1) auxiliary   |
+| Huffman Construction  | O(n log n)      | O(n) for tree    |
+| Huffman Encoding      | O(n log n)      | O(n)             |
+================================================================================
