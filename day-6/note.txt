@@ -1,0 +1,112 @@
+================================================================================
+           LAB DAY 6 NOTES: MINIMUM SPANNING TREES (PRIM'S & KRUSKAL'S)
+================================================================================
+
+1. OVERVIEW & DEFINITIONS
+--------------------------------------------------------------------------------
+A Spanning Tree of an undirected, connected, weighted graph G(V, E) is a subgraph
+T(V, E') that:
+  1. Contains all |V| vertices of G.
+  2. Is connected and contains no cycles (acyclic).
+  3. Contains exactly |V| - 1 edges.
+
+A Minimum Spanning Tree (MST) is a spanning tree whose sum of edge weights is the
+minimum possible among all spanning trees of G:
+    Cost(T) = Sum of w(u, v) for all (u, v) in E'
+
+Fundamental Principle (The Cut Property):
+  - For any cut (S, V - S) of graph G, if an edge (u, v) crossing the cut has the
+    minimum weight among all crossing edges (the "light edge"), then this edge
+    must belong to some MST of G.
+
+
+2. PRIM'S ALGORITHM (GROWING A TREE)
+--------------------------------------------------------------------------------
+Approach:
+  - Prim's is a vertex-based greedy algorithm.
+  - Starts with an arbitrary root vertex `s` and grows a single tree one edge at
+    a time until all vertices are included.
+
+Algorithm Steps:
+  1. Maintain two sets of vertices: vertices already in the MST tree, and vertices
+     not yet in the tree.
+  2. Maintain a `key[v]` value for every vertex `v` representing the minimum weight
+     edge connecting `v` to any vertex currently in the MST tree.
+  3. Initialize `key[s] = 0` and `key[v] = INFINITY` for all other `v != s`.
+  4. Initialize a Min-Priority Queue `Q` containing all vertices `V`.
+  5. While `Q` is not empty:
+     a. Extract vertex `u` with the smallest `key[u]` using `extractMin()`.
+     b. Add `u` to the MST.
+     c. For every adjacent vertex `v` of `u` that is still in `Q`:
+        If `weight(u, v) < key[v]`:
+          - Update `parent[v] = u`
+          - Update `key[v] = weight(u, v)`
+          - Call `decreaseKey(Q, v, key[v])`
+
+Data Structures in `prims_mst.c`:
+  - `MinPriorityQueue` using binary min-heap with position tracking array `pos[]`.
+  - Cost Adjacency Matrix representation for graph input and output.
+
+
+3. KRUSKAL'S ALGORITHM (FOREST TO TREE VIA DSU)
+--------------------------------------------------------------------------------
+Approach:
+  - Kruskal's is an edge-based greedy algorithm.
+  - Starts with every vertex as its own isolated tree (a spanning forest).
+  - Repeatedly picks the smallest weight edge in the entire graph. If adding the
+    edge does not form a cycle, it joins two trees.
+
+Algorithm Steps:
+  1. Create a list of all `m` edges in the graph.
+  2. Sort all edges in non-decreasing order of weight `w` using `qsort`.
+  3. Initialize a Disjoint Set Union (DSU / Union-Find) structure with `n` sets
+     (one for each vertex).
+  4. Initialize `mstEdges = []` and `edgeCount = 0`.
+  5. For each sorted edge (u, v) with weight w:
+     a. Find representative root of `u`: `rootU = findSet(u)`
+     b. Find representative root of `v`: `rootV = findSet(v)`
+     c. If `rootU != rootV` (no cycle formed):
+        - Add edge (u, v) to `mstEdges`.
+        - Merge the sets: `unionSets(rootU, rootV)`.
+        - Increment `edgeCount`.
+        - If `edgeCount == n - 1`, terminate early.
+
+Disjoint Set Union (DSU) Optimizations:
+  1. Path Compression (`findSet`):
+     - Flattens the tree so every node points directly to the root during lookup:
+       `parent[i] = findSet(parent[i])`
+  2. Union by Rank (`unionSets`):
+     - Attaches the smaller depth tree under the root of the deeper tree to keep
+       the tree shallow.
+  - Combined Time per DSU operation: O(alpha(V)), where alpha is the extremely
+    slow-growing Inverse Ackermann function (effectively <= 4 for all practical values).
+
+
+4. COMPARISON: PRIM'S VS KRUSKAL'S
+--------------------------------------------------------------------------------
+| Feature                | Prim's Algorithm             | Kruskal's Algorithm       |
+|------------------------|------------------------------|---------------------------|
+| Strategy               | Vertex-based (Grows one tree)| Edge-based (Merges forest)|
+| Primary Data Structure | Min-Priority Queue (Min-Heap)| DSU / Union-Find + Sort   |
+| Graph Preference       | Dense graphs (many edges)    | Sparse graphs (few edges) |
+| Time (Adjacency Matrix)| O(V^2)                       | O(E log E)                |
+| Time (Binary Heap)     | O((V + E) log V)             | O(E log E) = O(E log V)   |
+| Space Complexity       | O(V + E)                     | O(V + E)                  |
+
+
+5. DRY-RUN / EXAMPLE TRACE
+--------------------------------------------------------------------------------
+Graph Vertices: 1..9, Total Cost = 37
+
+Selected MST Edges (Kruskal's order):
+  1. (7, 8) wt: 1   -> Components: {7,8}
+  2. (6, 7) wt: 2   -> Components: {6,7,8}
+  3. (3, 9) wt: 2   -> Components: {3,9}, {6,7,8}
+  4. (1, 2) wt: 4   -> Components: {1,2}, {3,9}, {6,7,8}
+  5. (3, 6) wt: 4   -> Components: {1,2}, {3,6,7,8,9}
+  6. (3, 4) wt: 7   -> Components: {1,2}, {3,4,6,7,8,9}
+  7. (2, 3) / (1, 8) wt: 8 -> Components: {1,2,3,4,6,7,8,9}
+  8. (4, 5) wt: 9   -> Components: {1,2,3,4,5,6,7,8,9} (All 9 vertices connected!)
+
+Total MST Weight = 1 + 2 + 2 + 4 + 4 + 7 + 8 + 9 = 37.
+================================================================================
