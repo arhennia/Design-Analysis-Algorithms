@@ -24,5 +24,6 @@ S Table:
 0	0	0	3
 0	0	0	0
 
+
 Optimal parenthesization: ((A1 (A2 A3)) A4)
 The optimal ordering of the given matrices requires 9375 scalar multiplications.
