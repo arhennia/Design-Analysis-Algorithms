@@ -28,6 +28,7 @@ int findSet(Subset subsets[], int i) {
     return subsets[i].parent;
 }
 
+
 // Union of two sets x and y (by rank)
 void unionSets(Subset subsets[], int x, int y) {
     int rootX = findSet(subsets, x);
