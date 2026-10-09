@@ -29,7 +29,7 @@ HuffmanNode *createNode(char alphabet, int frequency) {
     return node; 
 }
 
-// helper to create a Min-Priority Queue
+// helper to create a minpriority queue
 MinPriorityQueue *createQueue(int capacity) {
     MinPriorityQueue *queue = (MinPriorityQueue *)malloc(sizeof(MinPriorityQueue));
     queue->size = 0;
@@ -63,7 +63,7 @@ void minHeapify(MinPriorityQueue *queue, int idx) {
     }
 }
 
-// extract minimum frequency node from Min-Priority Queue
+// extract minimum frequency node from minpriority queue
 HuffmanNode *extractMin(MinPriorityQueue *queue) {
     if (queue->size <= 0) return NULL;
     HuffmanNode *minNode = queue->array[0];
@@ -73,7 +73,7 @@ HuffmanNode *extractMin(MinPriorityQueue *queue) {
     return minNode;
 }
 
-// Insert a node into Min-Priority Queue
+// Insert a node into minpriority queue
 void insertQueue(MinPriorityQueue *queue, HuffmanNode *node) {
     queue->size++;
     int i = queue->size - 1;
