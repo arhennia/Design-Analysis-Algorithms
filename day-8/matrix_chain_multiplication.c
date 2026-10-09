@@ -60,7 +60,6 @@ void matrixChainOrder(int p[], int n) {
 }
 int main(void) {
     int n;
-
     printf("Enter number of matrices: ");
     if (scanf("%d", &n) != 1 || n <= 0) {
         printf("Invalid number of matrices.\n");
