@@ -3,21 +3,18 @@
 #include <limits.h>
 #include <string.h>
 
-// Structure to represent a node in the Min-Priority Queue
 typedef struct {
     int v;
     int key;
 } MinHeapNode;
 
-// Structure to represent a Min-Priority Queue (Min-Heap)
 typedef struct {
     int size;
     int capacity;
-    int *pos; // To track positions of vertices in heap for decreaseKey
+    int *pos;
     MinHeapNode **array;
 } MinPriorityQueue;
 
-// Create a new Min-Heap node
 MinHeapNode *newMinHeapNode(int v, int key) {
     MinHeapNode *node = (MinHeapNode *)malloc(sizeof(MinHeapNode));
     node->v = v;
@@ -25,7 +22,6 @@ MinHeapNode *newMinHeapNode(int v, int key) {
     return node;
 }
 
-// Create a Min-Priority Queue
 MinPriorityQueue *createMinPriorityQueue(int capacity) {
     MinPriorityQueue *minHeap = (MinPriorityQueue *)malloc(sizeof(MinPriorityQueue));
     minHeap->pos = (int *)malloc(capacity * sizeof(int));
@@ -35,14 +31,12 @@ MinPriorityQueue *createMinPriorityQueue(int capacity) {
     return minHeap;
 }
 
-// Swap two nodes in the Min-Heap
 void swapMinHeapNode(MinHeapNode **a, MinHeapNode **b) {
     MinHeapNode *temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// Min-heapify at a given index
 void minHeapify(MinPriorityQueue *minHeap, int idx) {
     int smallest = idx;
     int left = 2 * idx + 1;
@@ -57,44 +51,29 @@ void minHeapify(MinPriorityQueue *minHeap, int idx) {
     if (smallest != idx) {
         MinHeapNode *smallestNode = minHeap->array[smallest];
         MinHeapNode *idxNode = minHeap->array[idx];
-
-        // Update positions
         minHeap->pos[smallestNode->v] = idx;
         minHeap->pos[idxNode->v] = smallest;
-
-        // Swap nodes
         swapMinHeapNode(&minHeap->array[smallest], &minHeap->array[idx]);
-
         minHeapify(minHeap, smallest);
     }
 }
 
-// Check if Min-Heap is empty
 int isEmpty(MinPriorityQueue *minHeap) {
     return minHeap->size == 0;
 }
 
-// Extract the node with minimum key
 MinHeapNode *extractMin(MinPriorityQueue *minHeap) {
     if (isEmpty(minHeap))
         return NULL;
-
     MinHeapNode *root = minHeap->array[0];
     MinHeapNode *lastNode = minHeap->array[minHeap->size - 1];
-
     minHeap->array[0] = lastNode;
-
-    // Update position of last node
     minHeap->pos[root->v] = minHeap->size - 1;
     minHeap->pos[lastNode->v] = 0;
-
     minHeap->size--;
     minHeapify(minHeap, 0);
-
     return root;
 }
-
-// Decrease key value of a given vertex v
 void decreaseKey(MinPriorityQueue *minHeap, int v, int key) {
     int i = minHeap->pos[v];
     minHeap->array[i]->key = key;
@@ -107,12 +86,10 @@ void decreaseKey(MinPriorityQueue *minHeap, int v, int key) {
     }
 }
 
-// Check if a vertex is in the Min-Heap
 int isInMinHeap(MinPriorityQueue *minHeap, int v) {
     return minHeap->pos[v] < minHeap->size;
 }
 
-// Free Min-Heap memory
 void freeMinHeap(MinPriorityQueue *minHeap) {
     if (minHeap) {
         for (int i = 0; i < minHeap->capacity; i++) {
@@ -124,8 +101,6 @@ void freeMinHeap(MinPriorityQueue *minHeap) {
         free(minHeap);
     }
 }
-
-// Helper function to open input file from various paths
 FILE *openInputFile(const char *filename) {
     FILE *fp = fopen(filename, "r");
     if (fp) return fp;
@@ -150,14 +125,10 @@ FILE *openInputFile(const char *filename) {
     return NULL;
 }
 
-// Prim's algorithm using Min-Priority Queue
 void primMST(int **graph, int n, int startVertex) {
     int *parent = (int *)malloc(n * sizeof(int));
     int *key = (int *)malloc(n * sizeof(int));
-
     MinPriorityQueue *minHeap = createMinPriorityQueue(n);
-
-    // Initialize Min-Heap with all vertices
     for (int v = 0; v < n; v++) {
         parent[v] = -1;
         key[v] = INT_MAX;
@@ -167,7 +138,6 @@ void primMST(int **graph, int n, int startVertex) {
 
     minHeap->size = n;
 
-    // Start from the user-specified vertex (1-indexed to 0-indexed)
     int s = startVertex - 1;
     key[s] = 0;
     decreaseKey(minHeap, s, key[s]);
@@ -184,8 +154,6 @@ void primMST(int **graph, int n, int startVertex) {
             }
         }
     }
-
-    // Build Cost Adjacency Matrix of the Minimum Spanning Tree
     int **mstMatrix = (int **)malloc(n * sizeof(int *));
     for (int i = 0; i < n; i++) {
         mstMatrix[i] = (int *)calloc(n, sizeof(int));
@@ -201,8 +169,6 @@ void primMST(int **graph, int n, int startVertex) {
             totalWeight += graph[u][v];
         }
     }
-
-    // Display the Cost Adjacency Matrix of MST
     printf("\nOutput:\n");
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -210,10 +176,7 @@ void primMST(int **graph, int n, int startVertex) {
         }
         printf("\n");
     }
-
     printf("\nTotal Weight of the Spanning Tree: %d\n", totalWeight);
-
-    // Clean up
     for (int i = 0; i < n; i++) {
         free(mstMatrix[i]);
     }
@@ -225,27 +188,21 @@ void primMST(int **graph, int n, int startVertex) {
 
 int main(void) {
     int n, startVertex;
-
     printf("Enter the Number of Vertices: ");
     if (scanf("%d", &n) != 1 || n <= 0) {
         printf("Invalid number of vertices.\n");
         return 1;
     }
-
     printf("Enter the Starting Vertex: ");
     if (scanf("%d", &startVertex) != 1 || startVertex < 1 || startVertex > n) {
         printf("Invalid starting vertex.\n");
         return 1;
     }
-
-    // Open inUnAdjMat.dat
     FILE *fp = openInputFile("inUnAdjMat.dat");
     if (!fp) {
         printf("Error: Could not open inUnAdjMat.dat\n");
         return 1;
     }
-
-    // Allocate and read adjacency matrix
     int **graph = (int **)malloc(n * sizeof(int *));
     for (int i = 0; i < n; i++) {
         graph[i] = (int *)malloc(n * sizeof(int));
@@ -258,15 +215,10 @@ int main(void) {
         }
     }
     fclose(fp);
-
-    // Apply Prim's Algorithm
     primMST(graph, n, startVertex);
-
-    // Free graph memory
     for (int i = 0; i < n; i++) {
         free(graph[i]);
     }
     free(graph);
-
     return 0;
 }
