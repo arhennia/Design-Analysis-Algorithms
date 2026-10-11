@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+
 void printOptimalParens(int **s, int i, int j) {
     if (i == j) {
         printf("A%d", i);
@@ -12,6 +13,7 @@ void printOptimalParens(int **s, int i, int j) {
         printf(")");
     }
 }
+
 void matrixChainOrder(int p[], int n) {
     int **m = (int **)malloc((n + 1) * sizeof(int *));
     int **s = (int **)malloc((n + 1) * sizeof(int *));
@@ -58,6 +60,7 @@ void matrixChainOrder(int p[], int n) {
     free(m);
     free(s);
 }
+
 int main(void) {
     int n;
     printf("Enter number of matrices: ");
